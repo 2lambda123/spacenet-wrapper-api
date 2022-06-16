@@ -3,3 +3,4 @@ fastapi-camelcase
 python-multipart
 python-dotenv
 aiofiles
+uvicorn[standard]

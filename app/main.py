@@ -93,19 +93,30 @@ async def analyze_aggregated_demands(scenario_file: UploadFile = File(...)):
             content = await scenario_file.read()
             await new_scenario_file.write(content)
         # call spacenet headless script
-        subprocess.call(
-            [
-                "java",
-                "-jar",
-                spacenet_path,
-                "-h",
-                "demands-agg",
-                "-i",
-                scenario_path,
-                "-o",
-                results_path,
-            ]
-        )
+        try:
+            subprocess.check_output(
+                [
+                    "java",
+                    "-jar",
+                    spacenet_path,
+                    "-h",
+                    "demands-agg",
+                    "-i",
+                    scenario_path,
+                    "-o",
+                    results_path,
+                ],
+                stderr=subprocess.STDOUT,
+                shell=True,
+                universal_newlines=True,
+                timeout=spacenet_timeout,
+            )
+        except subprocess.CalledProcessError as e:
+            raise HTTPException(status_code=422, detail=e.output)
+        except subprocess.TimeoutExpired as e:
+            raise HTTPException(
+                status_code=422, detail=f"Timeout exceeded ({spacenet_timeout} s)"
+            )
         # read analysis outputs
         async with aiofiles.open(results_path, "r") as results_file:
             results = await results_file.read()

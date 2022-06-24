@@ -29,12 +29,15 @@ async def docs_redirect():
 
 
 @app.post("/demands-raw", tags=["demands"], response_model=RawDemandsAnalysis)
-async def analyze_raw_demands(scenario_file: UploadFile = File(...)):
+async def analyze_raw_demands(
+    scenario_file: UploadFile = File(...), consume_resources: bool = False
+):
     """
     Analyze raw demands for a scenario. Raw demands describe the time and
     location of resources demanded by elements and/or missions.
     \f
     :param scenario_file: User input (scenario).
+    :param consume_resources: True, if existing resources should be consumed.
     """
     # create a temp directory for working files
     with TemporaryDirectory() as tempdir:
@@ -57,6 +60,7 @@ async def analyze_raw_demands(scenario_file: UploadFile = File(...)):
                     scenario_path,
                     "-o",
                     results_path,
+                    "-c" if consume_resources else "",
                 ],
                 stderr=subprocess.STDOUT,
                 shell=True,
@@ -76,13 +80,16 @@ async def analyze_raw_demands(scenario_file: UploadFile = File(...)):
 
 
 @app.post("/demands-agg", tags=["demands"], response_model=AggregatedDemandsAnalysis)
-async def analyze_aggregated_demands(scenario_file: UploadFile = File(...)):
+async def analyze_aggregated_demands(
+    scenario_file: UploadFile = File(...), consume_resources: bool = False
+):
     """
     Analyze aggregated demands for a scenario. Aggregated demands group
     resources demanded by elements and/or missions to a time and node
     (supply node) or a start/end time and edge (supply edge).
     \f
     :param scenario_file: User input (scenario).
+    :param consume_resources: True, if existing resources should be consumed.
     """
     # create a temp directory for working files
     with TemporaryDirectory() as tempdir:
@@ -105,6 +112,7 @@ async def analyze_aggregated_demands(scenario_file: UploadFile = File(...)):
                     scenario_path,
                     "-o",
                     results_path,
+                    "-c" if consume_resources else "",
                 ],
                 stderr=subprocess.STDOUT,
                 shell=True,

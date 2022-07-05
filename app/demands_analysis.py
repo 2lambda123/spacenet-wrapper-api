@@ -94,11 +94,19 @@ class RawDemand(CamelModel):
     production: List[Resource] = Field(
         [], description="List of production demands aggregated to this moment"
     )
-    total_mass: float = Field(
-        ..., description="Total mass (kg) of all demands aggregated to this moment"
+    total_consumption_mass: float = Field(
+        ..., description="Total mass (kg) of all consumption demands aggregated to this supply node"
     )
-    total_volume: float = Field(
-        ..., description="Total volume (m^3) of all demands aggregated to this moment"
+    total_consumption_volume: float = Field(
+        ...,
+        description="Total volume (m^3) of all consumption demands aggregated to this supply node",
+    )
+    total_production_mass: float = Field(
+        ..., description="Total mass (kg) of all production demands aggregated to this supply node"
+    )
+    total_production_volume: float = Field(
+        ...,
+        description="Total volume (m^3) of all production demands aggregated to this supply node",
     )
 
 
@@ -130,12 +138,19 @@ class NodeDemand(CamelModel):
     production: List[Resource] = Field(
         [], description="List of production demands aggregated to this supply node"
     )
-    total_mass: float = Field(
-        ..., description="Total mass (kg) of all demands aggregated to this supply node"
+    total_consumption_mass: float = Field(
+        ..., description="Total mass (kg) of all consumption demands aggregated to this supply node"
     )
-    total_volume: float = Field(
+    total_consumption_volume: float = Field(
         ...,
-        description="Total volume (m^3) of all demands aggregated to this supply node",
+        description="Total volume (m^3) of all consumption demands aggregated to this supply node",
+    )
+    total_production_mass: float = Field(
+        ..., description="Total mass (kg) of all production demands aggregated to this supply node"
+    )
+    total_production_volume: float = Field(
+        ...,
+        description="Total volume (m^3) of all production demands aggregated to this supply node",
     )
 
 
@@ -161,12 +176,19 @@ class EdgeDemand(CamelModel):
     production: List[Resource] = Field(
         [], description="List of production demands aggregated to this supply edge"
     )
-    total_mass: float = Field(
-        ..., description="Total mass (kg) of all demands aggregated to this supply edge"
+    total_consumption_mass: float = Field(
+        ..., description="Total mass (kg) of all consumption demands aggregated to this supply node"
     )
-    total_volume: float = Field(
+    total_consumption_volume: float = Field(
         ...,
-        description="Total volume (m^3) of all demands aggregated to this supply edge",
+        description="Total volume (m^3) of all consumption demands aggregated to this supply node",
+    )
+    total_production_mass: float = Field(
+        ..., description="Total mass (kg) of all production demands aggregated to this supply node"
+    )
+    total_production_volume: float = Field(
+        ...,
+        description="Total volume (m^3) of all production demands aggregated to this supply node",
     )
     max_cargo_mass: float = Field(
         ...,

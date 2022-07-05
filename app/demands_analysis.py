@@ -88,8 +88,11 @@ class RawDemand(CamelModel):
     element: Optional[Element] = Field(
         None, description="Element associated with this demand"
     )
-    demands: List[Resource] = Field(
-        [], description="List of demands aggregated to this moment"
+    consumption: List[Resource] = Field(
+        [], description="List of consumption demands aggregated to this moment"
+    )
+    production: List[Resource] = Field(
+        [], description="List of production demands aggregated to this moment"
     )
     total_mass: float = Field(
         ..., description="Total mass (kg) of all demands aggregated to this moment"
@@ -121,8 +124,11 @@ class NodeDemand(CamelModel):
     location: Location = Field(
         ..., description="Location associated with this supply node"
     )
-    demands: List[Resource] = Field(
-        [], description="List of demands aggregated to this supply node"
+    consumption: List[Resource] = Field(
+        [], description="List of consumption demands aggregated to this supply node"
+    )
+    production: List[Resource] = Field(
+        [], description="List of production demands aggregated to this supply node"
     )
     total_mass: float = Field(
         ..., description="Total mass (kg) of all demands aggregated to this supply node"
@@ -149,8 +155,11 @@ class EdgeDemand(CamelModel):
     location: Location = Field(
         ..., description="Location (edge) associated with this supply edge"
     )
-    demands: List[Resource] = Field(
-        [], description="List of demands aggregated to this supply edge"
+    consumption: List[Resource] = Field(
+        [], description="List of consumption demands aggregated to this supply edge"
+    )
+    production: List[Resource] = Field(
+        [], description="List of production demands aggregated to this supply edge"
     )
     total_mass: float = Field(
         ..., description="Total mass (kg) of all demands aggregated to this supply edge"

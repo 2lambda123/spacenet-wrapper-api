@@ -1,20 +1,47 @@
+from enum import Enum
 from fastapi_camelcase import CamelModel
 from pydantic import Field
 from typing import List, Optional
 
 
-class Resource(CamelModel):
+class ResourceTypeType(str, Enum):
     """
-    Resource needed to satisfy a demand
+    Type of resource type
     """
 
-    class_of_supply: int = Field(
-        ..., description="Class of supply associated with this resource"
+    generic = "Generic"
+    continuous = "Continuous"
+    discrete = "Discrete"
+
+
+class Environment(str, Enum):
+    """
+    Stowage environment
+    """
+
+    pressurized = "Pressurized"
+    unpressurized = "Unpressurized"
+
+
+class ResourceType(CamelModel):
+    """
+    Type of resource
+    """
+
+    type: ResourceTypeType = Field(..., description="Type of this resource type")
+    name: str = Field(..., description="Name of this resource type")
+    class_of_supply: int = Field(..., description="Class of supply")
+    environment: Environment = Field(..., description="Environment type")
+    units: str = Field(..., description="Unit label for this resource type")
+    unit_mass: float = Field(
+        ..., description="Mass (kg) of 1.0 units of this resource type"
     )
-    name: str = Field(..., description="Name of this resource")
-    unit_mass: float = Field(..., description="Mass (kg) of 1.0 units of this resource")
     unit_volume: float = Field(
-        ..., description="Volume (m^3) of 1.0 units of this resource"
+        ..., description="Volume (m^3) of 1.0 units of this resource type"
+    )
+    packing_factor: float = Field(
+        ...,
+        description="Estimated mass (kg) of COS 5 required to pack 1.0 units of this resource",
     )
 
 
@@ -36,15 +63,15 @@ class Element(CamelModel):
     name: str = Field(..., description="Name of this element")
 
 
-class Demand(CamelModel):
+class Resource(CamelModel):
     """
-    Demand for an amount of a resource
+    A defined quantity of a resource type.
     """
 
-    resource: Resource = Field(..., description="Type of resource demanded")
-    amount: float = Field(..., description="Amount of resource demanded (units)")
-    mass: float = Field(..., description="Mass (kg) of this demand")
-    volume: float = Field(..., description="Volume (m^3) of this demand")
+    resource: ResourceType = Field(..., description="Type of resource")
+    amount: float = Field(..., description="Amount of resource (units)")
+    mass: float = Field(..., description="Mass (kg) of resource")
+    volume: float = Field(..., description="Volume (m^3) of resource")
 
 
 class RawDemand(CamelModel):
@@ -61,8 +88,11 @@ class RawDemand(CamelModel):
     element: Optional[Element] = Field(
         None, description="Element associated with this demand"
     )
-    demands: List[Demand] = Field(
-        [], description="List of demands aggregated to this moment"
+    consumption: List[Resource] = Field(
+        [], description="List of consumption demands aggregated to this moment"
+    )
+    production: List[Resource] = Field(
+        [], description="List of production demands aggregated to this moment"
     )
     total_mass: float = Field(
         ..., description="Total mass (kg) of all demands aggregated to this moment"
@@ -94,8 +124,11 @@ class NodeDemand(CamelModel):
     location: Location = Field(
         ..., description="Location associated with this supply node"
     )
-    demands: List[Demand] = Field(
-        [], description="List of demands aggregated to this supply node"
+    consumption: List[Resource] = Field(
+        [], description="List of consumption demands aggregated to this supply node"
+    )
+    production: List[Resource] = Field(
+        [], description="List of production demands aggregated to this supply node"
     )
     total_mass: float = Field(
         ..., description="Total mass (kg) of all demands aggregated to this supply node"
@@ -122,8 +155,11 @@ class EdgeDemand(CamelModel):
     location: Location = Field(
         ..., description="Location (edge) associated with this supply edge"
     )
-    demands: List[Demand] = Field(
-        [], description="List of demands aggregated to this supply edge"
+    consumption: List[Resource] = Field(
+        [], description="List of consumption demands aggregated to this supply edge"
+    )
+    production: List[Resource] = Field(
+        [], description="List of production demands aggregated to this supply edge"
     )
     total_mass: float = Field(
         ..., description="Total mass (kg) of all demands aggregated to this supply edge"

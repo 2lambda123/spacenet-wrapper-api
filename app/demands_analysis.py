@@ -13,6 +13,7 @@ class ResourceTypeType(str, Enum):
     continuous = "Continuous"
     discrete = "Discrete"
 
+
 class Environment(str, Enum):
     """
     Stowage environment
@@ -21,6 +22,7 @@ class Environment(str, Enum):
     pressurized = "Pressurized"
     unpressurized = "Unpressurized"
 
+
 class ResourceType(CamelModel):
     """
     Type of resource
@@ -28,16 +30,19 @@ class ResourceType(CamelModel):
 
     type: ResourceTypeType = Field(..., description="Type of this resource type")
     name: str = Field(..., description="Name of this resource type")
-    class_of_supply: int = Field(
-        ..., description="Class of supply"
-    )
+    class_of_supply: int = Field(..., description="Class of supply")
     environment: Environment = Field(..., description="Environment type")
     units: str = Field(..., description="Unit label for this resource type")
-    unit_mass: float = Field(..., description="Mass (kg) of 1.0 units of this resource type")
+    unit_mass: float = Field(
+        ..., description="Mass (kg) of 1.0 units of this resource type"
+    )
     unit_volume: float = Field(
         ..., description="Volume (m^3) of 1.0 units of this resource type"
     )
-    packing_factor: float = Field(..., description="Estimated mass (kg) of COS 5 required to pack 1.0 units of this resource")
+    packing_factor: float = Field(
+        ...,
+        description="Estimated mass (kg) of COS 5 required to pack 1.0 units of this resource",
+    )
 
 
 class Location(CamelModel):

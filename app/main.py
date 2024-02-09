@@ -63,8 +63,7 @@ async def analyze_raw_demands(
                     "-c" if consume_resources else "",
                 ],
                 stderr=subprocess.STDOUT,
-                shell=True,
-                universal_newlines=True,
+                shell=False, universal_newlines=True,
                 timeout=spacenet_timeout,
             )
         except subprocess.CalledProcessError as e:
@@ -115,8 +114,7 @@ async def analyze_aggregated_demands(
                     "-c" if consume_resources else "",
                 ],
                 stderr=subprocess.STDOUT,
-                shell=True,
-                universal_newlines=True,
+                shell=False, universal_newlines=True,
                 timeout=spacenet_timeout,
             )
         except subprocess.CalledProcessError as e:

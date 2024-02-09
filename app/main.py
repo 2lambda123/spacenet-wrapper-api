@@ -25,6 +25,17 @@ spacenet_timeout = os.getenv("SPACENET_TIMEOUT", 10)
 
 @app.get("/", include_in_schema=False)
 async def docs_redirect():
+    """"This function redirects the user to the '/docs' endpoint.
+    Parameters:
+        - None
+    Returns:
+        - RedirectResponse: A redirect response object that redirects the user to the '/docs' endpoint.
+    Processing Logic:
+        - Returns a RedirectResponse object.
+        - The redirect URL is set to '/docs'.
+        - The function is asynchronous.
+        - No parameters are required.""""
+    
     return RedirectResponse(url="/docs")
 
 
